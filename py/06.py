@@ -1,28 +1,26 @@
 import fileinput
 
-qs1 = set()
-qs2 = set()
-fresh = True
+qs1 = None
+qs2 = None
 total1 = 0
 total2 = 0
 for line in fileinput.input():
-    if not line.strip():
+    line = line.strip()
+    if not line:
         total1 += len(qs1)
         total2 += len(qs2)
-        fresh = True
-        qs1 = set()
-        qs2 = set()
+        qs1 = None
+        qs2 = None
         continue
 
-    newqs = set()
-    for c in line.strip():
-        newqs.add(c)
-    if fresh:
-        qs2 = set(newqs)
-        fresh = False
+    if qs1 == None:
+        qs1 = set(line)
     else:
-        qs2 = qs2.intersection(newqs)
-    qs1 = qs1.union(newqs)
+        qs1 = qs1 | set(line)
+    if qs2 == None:
+        qs2 = set(line)
+    else:
+        qs2 = qs2 & set(line)
 
 total1 += len(qs1)
 total2 += len(qs2)
